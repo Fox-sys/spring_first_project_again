@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorMessage> handleUnknownException(Exception ex) {
-        System.out.println(ex.getMessage());
+        ex.printStackTrace();
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorMessage(500, "Unexpected error"));

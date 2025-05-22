@@ -23,7 +23,9 @@ public class UserService implements UserDetailsService {
 
     public User getUserById(UUID id) {
         User user = userRepo.getUserById(id);
-        if (user == null) { throw new UserNotFoundByIdException(id); }
+        if (user == null) {
+            throw new UserNotFoundByIdException(id);
+        }
         return user;
     }
 
@@ -37,9 +39,7 @@ public class UserService implements UserDetailsService {
             throw new UserExistsErrorException(userToCreate.getUsername());
         }
         userToCreate.setPasswordHash(passwordEncoder.encode(userToCreate.getPassword()));
-        User createdUser = userRepo.create_user(userToCreate);
-        createdUser.setPasswordHash(null);
-        return createdUser;
+        return userRepo.create_user(userToCreate);
     }
 
     @Override
