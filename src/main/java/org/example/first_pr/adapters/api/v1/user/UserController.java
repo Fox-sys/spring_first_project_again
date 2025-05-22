@@ -17,7 +17,7 @@ public class UserController {
     }
 
     @GetMapping
-    public User getUser(@RequestBody UUID id) {
+    public User getUser(@RequestParam UUID id) {
         return userService.getUserById(id);
     }
 
