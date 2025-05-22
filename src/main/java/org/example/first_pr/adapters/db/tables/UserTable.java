@@ -1,6 +1,7 @@
 package org.example.first_pr.adapters.db.tables;
 
 import jakarta.persistence.*;
+import org.example.first_pr.application.auth.exceptions.UsernameToLong;
 
 import java.util.UUID;
 
@@ -15,11 +16,23 @@ public class UserTable {
     @Column(name = "last_name")
     private String lastName;
 
+    public String getUsername() {
+        return username;
+    }
 
-    public UserTable(UUID id, String firstName, String lastName) {
-        this.id = id;
+    public void setUsername(String username) {
+        if (username.length() > 255) { throw new UsernameToLong(username); }
+        this.username = username;
+    }
+
+    @Column(name = "username")
+    private String username;
+
+
+    public UserTable(String firstName, String lastName, String username) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.setUsername(username);
     }
 
     public UserTable() {

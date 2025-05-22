@@ -1,10 +1,11 @@
 package org.example.first_pr.adapters.api.v1.user;
 
+import org.example.first_pr.adapters.api.v1.user.schemes.CreateUser;
 import org.example.first_pr.application.auth.entities.User;
 import org.example.first_pr.application.auth.services.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController()
 @RequestMapping("/api/v1/user")
@@ -16,7 +17,13 @@ public class UserController {
     }
 
     @GetMapping
-    public User getUser() {
-        return userService.get_current_user();
+    public User getUser(@RequestBody UUID id) {
+        return userService.getUserById(id);
+    }
+
+    @PostMapping("/create")
+    public User createUser(@RequestBody CreateUser user) {
+        return userService.createUser(user.toEntity());
+
     }
 }

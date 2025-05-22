@@ -2,9 +2,13 @@ package org.example.first_pr.adapters.db.repositories;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceException;
+import jakarta.transaction.Transactional;
 import org.example.first_pr.adapters.db.tables.UserTable;
 import org.example.first_pr.application.auth.entities.User;
+import org.example.first_pr.application.auth.exceptions.UserExistsError;
 import org.example.first_pr.application.auth.interfaces.IUserRepo;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -30,11 +34,34 @@ public class UserRepo implements IUserRepo {
                 .getResultList();
 
         return userTables.stream()
-                .map(ut -> new User(ut.getId(), ut.getFirstName(), ut.getLastName()))
+                .map(ut -> new User(ut.getId(), ut.getFirstName(), ut.getLastName(), ut.getUsername()))
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public User getUserByUsername(String username) {
+        List<UserTable> result = entityManager.createQuery(
+                        "SELECT u FROM UserTable u WHERE u.username = :username", UserTable.class)
+                .setParameter("username", username)
+                .getResultList();
+
+        if (result.isEmpty()) return null;
+
+        return toUser(result.get(0));
+    }
+
+    @Override
+    @Transactional
+    public User create_user(User user) {
+        UserTable userTable = new UserTable(user.firstName(), user.lastName(), user.username());
+
+        entityManager.persist(userTable);
+        entityManager.flush();
+
+        return toUser(userTable);
+    }
+
     private User toUser(UserTable user) {
-        return new User(user.getId(), user.getFirstName(), user.getLastName());
+        return new User(user.getId(), user.getFirstName(), user.getLastName(), user.getUsername());
     }
 }
