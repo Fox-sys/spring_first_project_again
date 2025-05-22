@@ -4,8 +4,8 @@ import org.example.first_pr.application.base.exceptions.AppError;
 
 import java.util.UUID;
 
-public class UserNotFoundException extends AppError {
-  public UserNotFoundException(UUID id) {
+public class UserNotFoundByIdException extends AppError {
+  public UserNotFoundByIdException(UUID id) {
     super(404, "Пользователя с id \"" + id + "\" не существует");
   }
 }

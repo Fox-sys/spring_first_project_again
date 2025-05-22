@@ -2,13 +2,10 @@ package org.example.first_pr.adapters.db.repositories;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.PersistenceException;
 import jakarta.transaction.Transactional;
 import org.example.first_pr.adapters.db.tables.UserTable;
 import org.example.first_pr.application.auth.entities.User;
-import org.example.first_pr.application.auth.exceptions.UserExistsError;
 import org.example.first_pr.application.auth.interfaces.IUserRepo;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -34,7 +31,7 @@ public class UserRepo implements IUserRepo {
                 .getResultList();
 
         return userTables.stream()
-                .map(ut -> new User(ut.getId(), ut.getFirstName(), ut.getLastName(), ut.getUsername()))
+                .map(ut -> new User(ut.getId(), ut.getFirstName(), ut.getLastName(), ut.getUsername(), ut.getPasswordHash()))
                 .collect(Collectors.toList());
     }
 
@@ -53,7 +50,7 @@ public class UserRepo implements IUserRepo {
     @Override
     @Transactional
     public User create_user(User user) {
-        UserTable userTable = new UserTable(user.firstName(), user.lastName(), user.username());
+        UserTable userTable = new UserTable(user.getFirstName(), user.getLastName(), user.getUsername(), user.getPassword());
 
         entityManager.persist(userTable);
         entityManager.flush();
@@ -62,6 +59,6 @@ public class UserRepo implements IUserRepo {
     }
 
     private User toUser(UserTable user) {
-        return new User(user.getId(), user.getFirstName(), user.getLastName(), user.getUsername());
+        return new User(user.getId(), user.getFirstName(), user.getLastName(), user.getUsername(), user.getPasswordHash());
     }
 }

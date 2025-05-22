@@ -1,3 +1,5 @@
 databaseChangeLog:
   - include:
       file: db/changelog/changeset/init.sql
+  - include:
+      file: db/changelog/changeset/001_users_table_add_password_hash.sql
