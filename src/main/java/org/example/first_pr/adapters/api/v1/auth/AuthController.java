@@ -1,5 +1,8 @@
 package org.example.first_pr.adapters.api.v1.auth;
 
+import jakarta.servlet.http.HttpServletRequest;
+import org.apache.catalina.connector.Response;
+import org.example.first_pr.adapters.api.v1.greeting.dtos.Message;
 import org.example.first_pr.application.auth.entities.TokenDTO;
 import org.example.first_pr.application.auth.entities.UserAuthDto;
 import org.example.first_pr.application.auth.services.AuthService;
@@ -20,12 +23,19 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenDTO> login(@RequestBody UserAuthDto request) {
-        return ResponseEntity.ok(authService.authenticate(request));
+    public TokenDTO login(@RequestBody UserAuthDto request) {
+        return authService.authenticate(request);
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<TokenDTO> refresh(@RequestBody String refreshToken) {
-        return ResponseEntity.ok(authService.refresh(refreshToken));
+    public TokenDTO refresh(@RequestBody String refreshToken) {
+        return authService.refresh(refreshToken);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        String token = request.getHeader("Authorization").substring(7);
+        authService.makeSessionInActive(token);
+        return ResponseEntity.ok().build();
     }
 }

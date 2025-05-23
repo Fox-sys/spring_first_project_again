@@ -1,0 +1,12 @@
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "1johndoe111",
+  "password": "123"
+}
+
+### Получение текущего пользователя
+GET http://localhost:8080/api/v1/auth/dasdas
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzZXNzaW9uX2lkIjoiYmZjNTcyMTUtOGYyYy00OTQ5LWJlMzAtMDViMDNkYzAwY2YyIiwiaWQiOiJhYTFhZjE4MC0yN2Y1LTQyN2MtODQ2OC1kMWJmY2JjN2VlMDciLCJ1c2VybmFtZSI6IjFqb2huZG9lMTExIiwic3ViIjoiMWpvaG5kb2UxMTEiLCJpYXQiOjE3NDgwMjAzODEsImV4cCI6MTc0ODAyNzU4MX0.0ZMp56pWrnUvXI-Mp0St3VxujwUd4NBAdlaPSiIwYkA
